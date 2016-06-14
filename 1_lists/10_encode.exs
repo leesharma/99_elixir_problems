@@ -25,7 +25,7 @@ end
 
 defmodule Problem10 do
   @moduledoc false
-  @vsn 0.1
+  @vsn 0.2
 
   @doc """
   (*) Run-length encoding of a list. Use the result of problem P09 to implement
@@ -46,8 +46,8 @@ defmodule Problem10 do
     do_encode([], chunked_list)
   end
 
-  def do_encode(result, []), do: Enum.reverse(result)
-  def do_encode(acc, [[value | _] = head | tail]) do
+  defp do_encode(result, []), do: Enum.reverse(result)
+  defp do_encode(acc, [[value | _] = head | tail]) do
     [{Enum.count(head), value} | acc]
     |> do_encode(tail)
   end
