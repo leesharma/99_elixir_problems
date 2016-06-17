@@ -38,7 +38,7 @@ end
 
 defmodule Problem18 do
   @moduledoc false
-  @vsn 0.1
+  @vsn 0.2
 
   @doc """
   (**) Extract a slice from a list.
@@ -52,21 +52,26 @@ defmodule Problem18 do
   """
 
   @spec slice([elem], number, number) :: [elem] when elem: var
-  def slice(list, start, final) when start >= 0 and
-                                     final >= 0 and
-                                     final >= start do
-    new_list_length = final - start + 1
-    start_slice(list, start, new_list_length)
+  def slice(list, start, final) when final >= start do
+    final_length = final - start + 1
+
+    list
+    |> skip(start)
+    |> take(final_length)
   end
 
-  defp start_slice([], _, _), do: []
-  defp start_slice(list, 1, length), do: do_slice([], list, length)
-  defp start_slice([_ | tail], n, length), do: start_slice(tail, n-1, length)
+  def skip([], _), do: []
+  def skip(list, 1), do: list
+  def skip([_ | tail], n) when n >= 1, do: skip(tail, n-1)
 
-  defp do_slice(result, [], _), do: Enum.reverse result
-  defp do_slice(result, _, 0),  do: Enum.reverse result
-  defp do_slice(acc, [head | tail], n) do
+  def take(list, n) when n > 0 do
+    do_take([], list, n)
+  end
+
+  defp do_take(result, [], _), do: Enum.reverse result
+  defp do_take(result, _, 0),  do: Enum.reverse result
+  defp do_take(acc, [head | tail], n) do
     [head | acc]
-    |> do_slice(tail, n-1)
+    |> do_take(tail, n-1)
   end
 end
